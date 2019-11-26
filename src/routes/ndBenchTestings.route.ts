@@ -1,17 +1,17 @@
 import * as Router from 'koa-router';
 import { CommonResponse } from './commonResponse';
+import { NDBenchTestingsAction as Action } from '../actions/ndBenchTestings.action';
 
 class NDBenchTestingsRoute {
   router = new Router();
-
-  // commonRes = new CommonResponse(this.action);
+  action = new Action();
+  commonRes = new CommonResponse(this.action);
 
   constructor() {
 
     this.router.get('/', async (ctx) => {
 
-      // ctx.body = await this.query.getList(ctx.query);
-      ctx.body = {message: "getList"}
+      ctx.body = await this.commonRes.getList(ctx.query);
 
     });
 
