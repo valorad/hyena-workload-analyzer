@@ -59,3 +59,16 @@ typings/
 
 # next.js build output
 .next
+
+# project specific
+.vscode/
+.idea/
+
+package-*.json
+*.lock
+
+src/configs/**
+
+
+!.gitkeep
+!*.example.*
