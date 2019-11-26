@@ -1,8 +1,8 @@
 import * as Router from 'koa-router';
-import * as bodyParser from 'koa-bodyparser';
 
 // sub routes
-
+import { ndBenchTestingsRoute } from "./ndBenchTestings.route";
+import { ndBenchTrainingsRoute } from "./ndBenchTrainings.route";
 
 class API {
   static routerInstance = new Router();
@@ -18,6 +18,8 @@ class API {
     });
 
     // sub routes
+    this.routerInstance.use('/testings', ndBenchTestingsRoute.routes(), ndBenchTestingsRoute.allowedMethods());
+    this.routerInstance.use('/trainings', ndBenchTrainingsRoute.routes(), ndBenchTrainingsRoute.allowedMethods());
 
     return this.routerInstance;
 
