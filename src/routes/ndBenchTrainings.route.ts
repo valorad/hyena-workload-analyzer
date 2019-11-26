@@ -16,7 +16,7 @@ class NDBenchTrainingsRoute {
     });
 
     this.router.get('/metrics/:metric', async (ctx) => {
-      // e.g. /api/types/training/metrics/CPUUtilization_Average
+      // e.g. /api/types/trainings/metrics/CPUUtilization_Average
 
       // ctx.body = await this.query.getList(ctx.query);
       ctx.body = {message: `get metrics ${ctx.params.metric} from Training`}
