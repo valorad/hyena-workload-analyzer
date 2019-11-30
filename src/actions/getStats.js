@@ -27,7 +27,10 @@ const finalize = function (key, value) {
     median: 0,
     stDev: 0,
     normalizedSamples: [],
-    percentileSol1: 0,
+    percentileSol1: {
+      value: 0,
+      normValue: 0
+    },
     percentileSol2: {
       value: 0,
       normValue: 0
@@ -48,13 +51,29 @@ const finalize = function (key, value) {
   }
   // calculate percentile solution 1
   const threshold = 0.9;
-  const percentileMargin1 = Math.floor(samples.length * threshold);
-  result.percentileSol1 = samples[percentileMargin1];
+  let percentileMargin1 = Math.floor(samples.length * threshold);
+  result.percentileSol1 = {
+    value: samples[percentileMargin1],
+    normValue: result.normalizedSamples[percentileMargin1]
+  }
   // calculate percentile solution 2
-  const percentileMargin2 = Math.floor(result.normalizedSamples.length * threshold);
-  result.percentileSol2 = {
-    normValue: result.normalizedSamples[percentileMargin2],
-    value: samples[percentileMargin2]
+  let linearRanks = [];
+  let thresholdPercentage = threshold * 100;
+  for (let i = 0; i < samples.length; i++ ) {
+    linearRanks.push(100 / samples.length * (i + 1 - 0.5));
+  }
+  for (let i = 0; i < samples.length; i++ ) {
+    let currentRank = linearRanks[i];
+    let nextRank = linearRanks[i + 1];
+    if (currentRank === thresholdPercentage) {
+      result.percentileSol2.value = samples[i];
+      result.percentileSol2.normValue = result.normalizedSamples[i];
+      break;
+    } else if (currentRank < thresholdPercentage && thresholdPercentage < nextRank) {
+      result.percentileSol2.value = samples[i] + samples.length * (thresholdPercentage - currentRank) * (samples[i + 1] - samples[i]) / 100.0;
+      result.percentileSol2.normValue = result.normalizedSamples[i] + result.normalizedSamples.length * (thresholdPercentage - currentRank) * (result.normalizedSamples[i + 1] - result.normalizedSamples[i]) / 100.0
+      break;
+    }
   }
   return result;
 }
