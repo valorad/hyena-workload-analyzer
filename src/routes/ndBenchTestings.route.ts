@@ -7,6 +7,7 @@ class NDBenchTestingsRoute {
   router = new Router();
   action = new Action();
   commonRes = new CommonResponse(this.action);
+  dynamicModels: any = {};
 
   constructor() {
 
@@ -19,9 +20,13 @@ class NDBenchTestingsRoute {
     this.router.get('/metrics/:metric', async (ctx) => {
       // e.g. /api/types/testings/metrics/CPUUtilization_Average
 
-      const statCollection = model(`mrResultTestings${ctx.params.metric}`, new Schema({}, {versionKey: false, strict: false}), `mrResultTestings${ctx.params.metric}`);
+      const collectionName = `mrResultTestings${ctx.params.metric}`;
 
-      const statistics: any[] | undefined = await this.action.getStatistics(statCollection);
+      // init models if is the first time calling this route
+      if (!this.dynamicModels[collectionName]) {
+        this.dynamicModels[collectionName] = model(collectionName, new Schema({}, {versionKey: false, strict: false}), collectionName);
+      }
+      const statistics: any[] | undefined = await this.action.getStatistics(this.dynamicModels[collectionName]);
 
       if (statistics && statistics[0]) {
         ctx.body = {

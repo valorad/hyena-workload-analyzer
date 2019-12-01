@@ -48,7 +48,7 @@ export class NDBenchTestingsAction {
           }
         });
       }`,
-      finalize: `finalize = function (key, value) {
+      finalize: `function (key, value) {
         // sort samples
         let samples = value.fragment.sort( (val1, val2) => { return val1 - val2} );
         const result = {
