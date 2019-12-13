@@ -45,7 +45,7 @@ const finalize = function (key, value) {
   // calculate standard deviation
   let avgVal = value.sum / parseFloat(samples.length);
   let squareDiffValues = samples.map(val => Math.pow( (val - avgVal), 2 ) );
-  result.stDev = Math.sqrt( Array.sum(squareDiffValues) / avgVal );
+  result.stDev = Math.sqrt( Array.sum(squareDiffValues) / parseFloat(samples.length) );
   for (let sample of samples) {
     result.normalizedSamples.push( (sample - result.min ) / (result.max - result.min) );
   }
@@ -71,7 +71,7 @@ const finalize = function (key, value) {
       break;
     } else if (currentRank < thresholdPercentage && thresholdPercentage < nextRank) {
       result.percentileSol2.value = samples[i] + samples.length * (thresholdPercentage - currentRank) * (samples[i + 1] - samples[i]) / 100.0;
-      result.percentileSol2.normValue = result.normalizedSamples[i] + result.normalizedSamples.length * (thresholdPercentage - currentRank) * (result.normalizedSamples[i + 1] - result.normalizedSamples[i]) / 100.0
+      result.percentileSol2.normValue = result.normalizedSamples[i] + result.normalizedSamples.length * (thresholdPercentage - currentRank) * (result.normalizedSamples[i + 1] - result.normalizedSamples[i]) / 100.0;
       break;
     }
   }
